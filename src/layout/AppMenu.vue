@@ -8,9 +8,13 @@ const model = ref([
         label: 'Home',
         items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/' }]
     },
-     {
-        label: 'Dev',
-        items: [{ label: 'Development', icon: 'pi pi-fw pi-car', to: '/dev' }]
+    {
+        //command:()=>{
+        //     router.push({name:'Dev'})
+        //     }
+        // }
+        label: 'Development',
+        items: [{ label: 'Project', icon: 'pi pi-fw pi-github', to: '/dev/project' }, { label: 'CRUD', icon: 'pi pi-fw pi-car', to: '/dev' }]
     },
     {
         label: 'UI Components',
