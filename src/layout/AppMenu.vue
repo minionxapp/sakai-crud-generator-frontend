@@ -1,20 +1,25 @@
 <script setup>
 import { ref } from 'vue';
 
+import { onMounted } from 'vue';
 import AppMenuItem from './AppMenuItem.vue';
-
 const model = ref([
     {
         label: 'Home',
-        items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/' }]
+
+        items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/' },
+        { label: 'Logout', icon: 'pi pi-fw pi-home', to: '/logout' }
+        ]
     },
     {
-        //command:()=>{
-        //     router.push({name:'Dev'})
-        //     }
-        // }
         label: 'Development',
-        items: [{ label: 'Project', icon: 'pi pi-fw pi-github', to: '/dev/project' }, { label: 'CRUD', icon: 'pi pi-fw pi-car', to: '/dev' }]
+        items: [{ label: 'Project', icon: 'pi pi-fw pi-github', to: '/dev/project' },
+        { label: 'Table', icon: 'pi pi-fw pi-github', to: '/dev/table' },
+        { label: 'Table Kolom', icon: 'pi pi-fw pi-github', to: '/dev/tablekolom' },
+        { label: 'Backend', icon: 'pi pi-fw pi-car', to: '/dev' },
+        { label: 'Frontend', icon: 'pi pi-fw pi-car', to: { name: 'front' } },
+        { label: 'Coba', icon: 'pi pi-fw pi-car', to: { name: 'coba' } }
+        ]
     },
     {
         label: 'UI Components',
@@ -40,6 +45,7 @@ const model = ref([
         label: 'Pages',
         icon: 'pi pi-fw pi-briefcase',
         to: '/pages',
+        active: false,
         items: [
             {
                 label: 'Landing',
@@ -50,11 +56,6 @@ const model = ref([
                 label: 'Auth',
                 icon: 'pi pi-fw pi-user',
                 items: [
-                    {
-                        label: 'Login',
-                        icon: 'pi pi-fw pi-sign-in',
-                        to: '/auth/login'
-                    },
                     {
                         label: 'Error',
                         icon: 'pi pi-fw pi-times-circle',
@@ -145,6 +146,14 @@ const model = ref([
         ]
     }
 ]);
+
+
+onMounted(async () => {
+    // console.log("menu awal")
+    // console.log(JSON.stringify(model.value))
+    // console.log("menu akhir....")
+
+})
 </script>
 
 <template>
@@ -152,6 +161,7 @@ const model = ref([
         <template v-for="(item, i) in model" :key="item">
             <app-menu-item v-if="!item.separator" :item="item" :index="i"></app-menu-item>
             <li v-if="item.separator" class="menu-separator"></li>
+
         </template>
     </ul>
 </template>

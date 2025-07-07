@@ -6,9 +6,8 @@
                 <template #start>
                     <Button label="New" icon="pi pi-plus" severity="secondary" class="mr-2" @click="openNew" />
                     <!-- <Button label="Delete" icon="pi pi-trash" severity="secondary" @click="confirmDeleteItem"
-                        :disabled="!selectedProducts || !selectedProducts.length" /> -->
+                    :disabled="!selectedProducts || !selectedProducts.length" /> -->
                 </template>
-
                 <template #end>
                     <Button label="Export" icon="pi pi-upload" severity="secondary" @click="exportCSV($event)" />
                 </template>
@@ -21,7 +20,7 @@
                 currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products">
                 <template #header>
                     <div class="flex flex-wrap gap-2 items-center justify-between">
-                        <h4 class="m-0">Manage Project</h4>
+                        <h4 class="m-0">Manage Group</h4>
                         <IconField>
                             <InputIcon @click="searchData()">
                                 <i class=" pi pi-search" />
@@ -30,10 +29,13 @@
                         </IconField>
                     </div>
                 </template>
+
                 <Column selectionMode="multiple" style="width: 3rem" :exportable="false"></Column>
                 <Column field="id" header="Id" sortable style="min-width: 12rem"></Column>
-                <Column field="name" header="Name" sortable style="min-width: 16rem"></Column>
-                <Column field="desc" header="Description" sortable style="min-width: 16rem"></Column>
+                <Column field="name" header="name" sortable style="min-width: 12rem"></Column>
+                <Column field="desc" header="desc" sortable style="min-width: 12rem"></Column>
+                <Column field="pic" header="pic" sortable style="min-width: 12rem"></Column>
+                <Column field="status" header="status" sortable style="min-width: 12rem"></Column>
                 <Column :exportable="false" style="min-width: 12rem">
                     <template #body="slotProps">
                         <Button icon="pi pi-pencil" outlined rounded class="mr-2" @click="editItem(slotProps.data)" />
@@ -49,14 +51,12 @@
                     <span v-if="itemDelete">Are you sure you want to delete <b>{{ itemDelete.name }}</b>?</span>
                 </div>
                 <template #footer>
-                    <Button label="No" icon="pi pi-times" text @click="deleteMyasetDialog = false" />
+                    <Button label="No" icon="pi pi-times" text @click="deleteDialog = false" />
                     <Button label="Yes" icon="pi pi-check" @click="deleteItem" />
                 </template>
             </Dialog>
-
-
             <!-- //CREATE DIALOG -->
-            <Dialog v-model:visible="formDialog" :style="{ width: '450px' }" header="Project Details" :modal="true">
+            <Dialog v-model:visible="formDialog" :style="{ width: '450px' }" header="Group Details" :modal="true">
                 <div class="flex flex-col gap-6">
                     <img v-if="product.image"
                         :src="`https://primefaces.org/cdn/primevue/images/product/${product.image}`"
@@ -68,14 +68,24 @@
                                 fluid readonly="true" hidden />
                         </div>
                         <div>
-                            <label for="name" class="block font-bold mb-3">Nama Project</label>
-                            <InputText rows="5" id="title" v-model.trim="item.name" required="false" fluid />
-                            <small v-if="submitted && !item.title" class="text-red-500">Title is required.</small>
+                            <label for="name" class="block font-bold mb-3">name</label>
+                            <InputText rows="5" id="name" v-model.trim="item.name" required="false" fluid />
+                            <small v-if="submitted && !item.name" class="text-red-500">name is required.</small>
                         </div>
                         <div>
-                            <label for="desc" class="block font-bold mb-3">Description</label>
-                            <InputText rows="5" id="title" v-model.trim="item.desc" required="false" fluid />
-                            <small v-if="submitted && !item.desc" class="text-red-500">Descripstion is required.</small>
+                            <label for="desc" class="block font-bold mb-3">desc</label>
+                            <InputText rows="5" id="desc" v-model.trim="item.desc" required="false" fluid />
+                            <small v-if="submitted && !item.desc" class="text-red-500">desc is required.</small>
+                        </div>
+                        <div>
+                            <label for="pic" class="block font-bold mb-3">pic</label>
+                            <InputText rows="5" id="pic" v-model.trim="item.pic" required="false" fluid />
+                            <small v-if="submitted && !item.pic" class="text-red-500">pic is required.</small>
+                        </div>
+                        <div>
+                            <label for="status" class="block font-bold mb-3">status</label>
+                            <InputText rows="5" id="status" v-model.trim="item.status" required="false" fluid />
+                            <small v-if="submitted && !item.status" class="text-red-500">status is required.</small>
                         </div>
                         <div class="flex align-items-center gap-3 mb-5"></div>
                         <div class="flex justify-content-end gap-2">
@@ -85,12 +95,9 @@
                     </form>
                 </div>
             </Dialog>
-
         </div>
     </div>
 </template>
-
-
 <script setup>
 import custumFetch from '@/api';
 import { useAuthStore } from '@/stores/authStores';
@@ -101,10 +108,8 @@ import DataTable from 'primevue/datatable';
 import { useToast } from 'primevue/usetoast';
 import { onMounted, ref } from 'vue';
 import AlertMessage from '../../components/AlertMessage.vue';
-
 const autStores = useAuthStore();
 const { currentUser, currentToken, getToken } = autStores
-
 const dt = ref();
 const products = ref();
 const formDialog = ref(false);
@@ -130,7 +135,6 @@ async function onPageChange(event) {
     rowPerPage.value = event.rows
     searchData()
 }
-
 function openNew() {
     item.value = ({})
     submitted.value = false;
@@ -148,7 +152,7 @@ const searchData = async () => {
         urlParam = '&name=' + paramCari
     }
     try {
-        const { data } = await custumFetch.get("/dev_projects/?page=" + pageNo.value + '&size=' + rowPerPage.value + urlParam,
+        const { data } = await custumFetch.get("/groups/?page=" + pageNo.value + '&size=' + rowPerPage.value + urlParam,
             {
                 withCredentials: true,
                 headers: {
@@ -162,14 +166,13 @@ const searchData = async () => {
         console.log(error)
     }
 }
-
 function confirmDeleteItem(value) {
     itemDelete.value = value
     deleteDialog.value = true;
 }
 async function deleteItem() {
     deleteDialog.value = false
-    const myasetDelete = await custumFetch.delete('/dev_projects/' + itemDelete.value.id,
+    const myasetDelete = await custumFetch.delete('/groups/' + itemDelete.value.id,
         {
             withCredentials: true,
             headers: {
@@ -196,10 +199,12 @@ const handleSubmit = async () => {
     //unutk edit id sudah ada
     if (item.value.id) {
         try {
-            const results = await custumFetch.put("/dev_projects/" + item.value.id,
+            const results = await custumFetch.put("/groups/" + item.value.id,
                 {
                     name: item.value.name,
                     desc: item.value.desc,
+                    pic: item.value.pic,
+                    status: item.value.status,
                 }, {
                 withCredentials: true,
                 headers: {
@@ -216,10 +221,12 @@ const handleSubmit = async () => {
 
     } else {
         try {
-            const results = await custumFetch.post("/dev_projects",
+            const results = await custumFetch.post("/groups",
                 {
                     name: item.value.name,
                     desc: item.value.desc,
+                    pic: item.value.pic,
+                    status: item.value.status,
                 }, {
                 withCredentials: true,
                 headers: {

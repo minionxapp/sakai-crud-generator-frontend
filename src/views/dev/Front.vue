@@ -3,6 +3,7 @@ import custumFetch from '@/api';
 import { onMounted, ref } from 'vue';
 //untuk tab
 import { useAuthStore } from '@/stores/authStores';
+import { Frontend, Index } from '@/stores/frontendStores';
 const dropdownProjectItems = ref([]);
 const dropdownProjectItem = ref(null);
 const dropdownTableItems = ref([]);
@@ -36,19 +37,10 @@ async function getTablesByProject(value) {
 }
 const submit = async () => {
     const tableId = ((dropdownTableItem.value).id)
-    try {
-        const { data } = await custumFetch.get("/dev/schema/" + tableId,
-            {
-                withCredentials: true,
-                headers: {
-                    "X-API-TOKEN": await getToken()
-                },
-            }
-        )
-        result.value = data.data
-    } catch (error) {
-        console.log(error)
-    }
+    const tableName = ((dropdownTableItem.value).name)
+
+    result.value.front = await Frontend(tableId, tableName)
+    result.value.index = await Index(tableId, tableName)
 }
 const allProjects = async () => {
     try {
@@ -76,7 +68,7 @@ onMounted(async () => {
     <Fluid>
         <div class="">
             <div class="card flex flex-col gap-4">
-                <div class="font-semibold text-xl">Project Name</div>
+                <div class="font-semibold text-xl">Frontend</div>
                 <div class="flex flex-wrap items-start gap-4">
                     <div class="field">
                         <label for="project" class="sr-only">Project</label>
@@ -94,80 +86,20 @@ onMounted(async () => {
                 </div>
                 <Tabs value="0">
                     <TabList>
-                        <Tab value="0">Schema</Tab>
-                        <Tab value="1">Model</Tab>
-                        <Tab value="2">Validation</Tab>
-                        <Tab value="3">Service</Tab>
-                        <Tab value="4">Controller</Tab>
-                        <Tab value="5">Route</Tab>
-                        <Tab value="6">Util Test</Tab>
-                        <Tab value="7">Test</Tab>
-                        <Tab value="8">File</Tab>
+                        <Tab value="0">Frontend</Tab>
+                        <Tab value="1">Index</Tab>
                     </TabList>
                     <TabPanels>
                         <TabPanel value="0">
                             <pre>
-                                <code> {{ result.schema }} </code>
+                                <code> {{ result.front }} </code>
                             </pre>
                         </TabPanel>
                         <TabPanel value="1">
                             <pre>
-                            <code>
-                                {{ result.model }}
-                            </code>
-                        </pre>
+                                <code> {{ result.index }} </code>
+                            </pre>
                         </TabPanel>
-                        <TabPanel value="2">
-                            <pre>
-                            <code>
-                                {{ result.validate }}
-                            </code>
-                        </pre>
-                        </TabPanel>
-                        <TabPanel value="3">
-                            <pre>
-                            <code>
-                                {{ result.service }}
-                            </code>
-                        </pre>
-                        </TabPanel>
-
-                        <TabPanel value="4">
-                            <pre>
-                            <code>
-                                {{ result.controller }}
-                            </code>
-                        </pre>
-                        </TabPanel>
-                        <TabPanel value="5">
-                            <pre>
-                            <code>
-                                {{ result.route }}
-                            </code>
-                        </pre>
-                        </TabPanel>
-                        <TabPanel value="6">
-                            <pre>
-                            <code>
-                                {{ result.utiltest }}
-                            </code>
-                        </pre>
-                        </TabPanel>
-                        <TabPanel value="7">
-                            <pre>
-                            <code>
-                                {{ result.test }}
-                            </code>
-                        </pre>
-                        </TabPanel>
-                        <TabPanel value="8">
-                            <pre>
-                            <code>
-                                {{ result.file }}
-                            </code>
-                        </pre>
-                        </TabPanel>
-
 
                     </TabPanels>
                 </Tabs>

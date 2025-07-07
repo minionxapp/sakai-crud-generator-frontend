@@ -1,12 +1,16 @@
 import AppLayout from '@/layout/AppLayout.vue';
+import { useAuthStore } from '@/stores/authStores';
 import { createRouter, createWebHistory } from 'vue-router';
-
 const router = createRouter({
     history: createWebHistory(),
     routes: [
         {
             path: '/',
+            name: 'dasboard',
             component: AppLayout,
+            meta: {
+                requiredAuth: true
+            },
             children: [
                 {
                     path: '/dev',
@@ -17,6 +21,26 @@ const router = createRouter({
                     path: '/dev/project',
                     name: 'project',
                     component: () => import('@/views/dev/Project.vue')
+                },
+                {
+                    path: '/dev/table',
+                    name: 'table',
+                    component: () => import('@/views/dev/Table.vue')
+                },
+                {
+                    path: '/dev/tablekolom',
+                    name: 'tablekolom',
+                    component: () => import('@/views/dev/Tabelkolom.vue')
+                },
+                {
+                    path: '/dev/front',
+                    name: 'front',
+                    component: () => import('@/views/dev/Front.vue')
+                },
+                {
+                    path: '/dev/coba',
+                    name: 'coba',
+                    component: () => import('@/views/dev/Coba.vue')
                 },
                 {
                     path: '/',
@@ -40,7 +64,7 @@ const router = createRouter({
                 },
                 {
                     path: '/uikit/table',
-                    name: 'table',
+                    name: 'tablekit',
                     component: () => import('@/views/uikit/TableDoc.vue')
                 },
                 {
@@ -115,6 +139,12 @@ const router = createRouter({
                     component: () => import('@/views/pages/Documentation.vue')
                 }
             ]
+
+        },
+        {
+            path: '/logout',
+            name: 'logout',
+            component: () => import('@/views/pages/auth/Logout.vue')
         },
         {
             path: '/landing',
@@ -128,7 +158,7 @@ const router = createRouter({
         },
 
         {
-            path: '/auth/login',
+            path: '/login',
             name: 'login',
             component: () => import('@/views/pages/auth/Login.vue')
         },
@@ -144,5 +174,15 @@ const router = createRouter({
         }
     ]
 });
+
+router.beforeEach(async (to, from) => {
+    const authStore = await useAuthStore()
+    if (to.meta.requiredAuth && !authStore.currentUser) {
+        // alert("Anda harus login dulu untuk mengakses halaman ini .........!")
+        return {
+            path: '/auth/access'
+        }
+    }
+})
 
 export default router;
