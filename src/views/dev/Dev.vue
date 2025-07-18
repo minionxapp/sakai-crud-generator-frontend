@@ -34,10 +34,30 @@ async function getTablesByProject(value) {
         console.log(error)
     }
 }
+
+//membuat script tanpa membuat file
 const submit = async () => {
     const tableId = ((dropdownTableItem.value).id)
     try {
-        const { data } = await custumFetch.get("/dev/schema/" + tableId,
+        const { data } = await custumFetch.get("/dev/schema/" + tableId + "?createFile=false",
+            {
+                withCredentials: true,
+                headers: {
+                    "X-API-TOKEN": await getToken()
+                },
+            }
+        )
+        result.value = data.data
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+//membuat file 
+const submit2 = async () => {
+    const tableId = ((dropdownTableItem.value).id)
+    try {
+        const { data } = await custumFetch.get("/dev/schema/" + tableId + "?createFile=true",
             {
                 withCredentials: true,
                 headers: {
@@ -86,11 +106,11 @@ onMounted(async () => {
                     </div>
                     <div class="field">
                         <label for="table" class="sr-only">Table</label>
-                        <!-- <InputText id="firstname1" type="text" placeholder="Firstname" /> -->
                         <Select id="state" v-model="dropdownTableItem" :options="dropdownTableItems" optionLabel="name"
                             placeholder="Select Table" class="w-full" @change="onTableChange()"></Select>
                     </div>
-                    <Button label="Submit" :fluid="false" @click="submit()"></Button>
+                    <Button label="File Script" :fluid="false" @click="submit()"></Button>
+                    <Button label="Create File" :fluid="false" @click="submit2()"></Button>
                 </div>
                 <Tabs value="0">
                     <TabList>

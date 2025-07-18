@@ -43,17 +43,17 @@
                     </div>
                 </template>
                 <Column selectionMode="multiple" style="width: 3rem" :exportable="false"></Column>
-                <Column field="id" header="Id" sortable style="min-width: 12rem"></Column>
+                <Column field="id" header="Id" sortable style="min-width: 2rem"></Column>
                 <Column field="name" header="Name Kolom" sortable style="min-width: 16rem"></Column>
-                <Column field="type" header="Type" sortable style="min-width: 16rem"></Column>
-                <Column field="table_id" header="Id Table" sortable style="min-width: 16rem"></Column>
+                <Column field="type" header="Type" sortable style="min-width: 4 rem"></Column>
+                <Column field="table_id" header="Id Table" sortable style="min-width: 4rem"></Column>
                 <Column field="table_name" header="Nama Table" sortable style="min-width: 16rem"></Column>
                 <Column field="desc" header="Desc" sortable style="min-width: 16rem"></Column>
-                <Column field="length" header="Panjang" sortable style="min-width: 16rem"></Column>
-                <Column field="is_id" header="Set ID" sortable style="min-width: 16rem"></Column>
-                <Column field="is_null" header="Set Null" sortable style="min-width: 16rem"></Column>
-                <Column field="is_uniq" header="Set Unique" sortable style="min-width: 16rem"></Column>
-                <Column field="default" header="default" sortable style="min-width: 16rem"></Column>
+                <Column field="length" header="Panjang" sortable style="min-width: 4 rem"></Column>
+                <Column field="is_id" header="Set ID" sortable style="min-width: 4 rem"></Column>
+                <Column field="is_null" header="Set Null" sortable style="min-width: 4 rem"></Column>
+                <Column field="is_uniq" header="Set Unique" sortable style="min-width: 4 rem"></Column>
+                <Column field="default" header="default" sortable style="min-width: 4 rem"></Column>
                 <Column :exportable="false" style="min-width: 12rem">
                     <template #body="slotProps">
                         <Button icon="pi pi-pencil" outlined rounded class="mr-2" @click="editItem(slotProps.data)" />

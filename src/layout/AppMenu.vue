@@ -12,13 +12,40 @@ const model = ref([
         ]
     },
     {
+        label: 'Admin',
+        items: [
+            { label: 'Group', icon: 'pi pi-fw pi-users', to: { name: 'group' } },
+            { label: 'Job Family', icon: 'pi pi-fw pi-briefcase', to: { name: 'Jobfamily' } },
+            { label: 'Sub Job Family', icon: 'pi pi-fw pi-paperclip', to: { name: 'Subjobfamily' } },
+            { label: 'Kompetensi', icon: 'pi pi-fw pi-slack', to: { name: 'Kompetensi' } }
+        ]
+    },
+    {
         label: 'Development',
-        items: [{ label: 'Project', icon: 'pi pi-fw pi-github', to: '/dev/project' },
-        { label: 'Table', icon: 'pi pi-fw pi-github', to: '/dev/table' },
-        { label: 'Table Kolom', icon: 'pi pi-fw pi-github', to: '/dev/tablekolom' },
-        { label: 'Backend', icon: 'pi pi-fw pi-car', to: '/dev' },
-        { label: 'Frontend', icon: 'pi pi-fw pi-car', to: { name: 'front' } },
-        { label: 'Coba', icon: 'pi pi-fw pi-car', to: { name: 'coba' } }
+        items: [{ label: 'Project', icon: 'pi pi-fw pi-folder-plus', to: '/dev/project' },
+        { label: 'Table', icon: 'pi pi-fw pi-table', to: '/dev/table' },
+        { label: 'Table Kolom', icon: 'pi pi-fw pi-objects-column', to: '/dev/tablekolom' },
+        { label: 'Backend', icon: 'pi pi-fw pi-barcode ', to: '/dev' },
+        { label: 'Frontend', icon: 'pi pi-fw pi-code', to: { name: 'front' } },
+
+            // { label: 'Coba', icon: 'pi pi-fw pi-car', to: { name: 'coba' } },
+            // { label: 'dev_direktori', icon: 'pi pi-fw pi-car', to: { name: 'dev_direktori' } },
+            // { label: 'group', icon: 'pi pi-fw pi-car', to: { name: 'group' } },
+            // { label: 'testaja', icon: 'pi pi-fw pi-car', to: { name: 'testaja' } }
+        ]
+    },
+    {
+        label: 'Test',
+        items: [
+            {
+                label: 'Coba', icon: 'pi pi-fw pi-clipboard', items: [
+                    { label: 'dev_direktori', icon: 'pi pi-fw pi-folder-open', to: { name: 'dev_direktori' } },
+                    { label: 'group', icon: 'pi pi-fw pi-users', to: { name: 'group' } },
+                    { label: 'testaja', icon: 'pi pi-fw pi-car', to: { name: 'testaja' } },
+                    // { label: 'user', icon: 'pi pi-fw pi-user', to: { name: 'user' } }
+                    { label: 'pmakai', icon: 'pi pi-fw pi-car', to: { name: 'pmakai' } }
+                ]
+            },
         ]
     },
     {

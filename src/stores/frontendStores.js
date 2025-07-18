@@ -1,6 +1,7 @@
 
 import custumFetch from '@/api';
 import { useAuthStore } from '@/stores/authStores';
+import { firstUpper, replaceString } from '@/stores/util';
 import { ref } from 'vue';
 const autStores = useAuthStore();
 const { currentUser, currentToken, getToken } = autStores
@@ -17,9 +18,7 @@ export const GetKoloms = async (tableId) => {
                 },
             }
         )
-        // dropdownProjectItems.value = data.data
         koloms.value = data.data
-        // console.log(koloms.value)
     } catch (error) {
         console.log(error)
     }
@@ -28,7 +27,7 @@ export const GetKoloms = async (tableId) => {
 
 export const Frontend = async (tableId, tableName) => {
     await GetKoloms(tableId)
-
+    const tablename = await replaceString(tableName)
 
     let front = ''
     front = front +
@@ -64,13 +63,19 @@ export const Frontend = async (tableId, tableName) => {
         '                </div>\n' +
         '            </template>\n\n' +
         '            <Column selectionMode="multiple" style="width: 3rem" :exportable="false"></Column>\n' +
-        '            <Column field="id" header="Id" sortable style="min-width: 12rem"></Column>\n'
+        '            <Column field="id" header="Id" sortable style="min-width: 4rem"></Column>\n'
     for (let index = 0; index < koloms.value.length; index++) {
         const element = koloms.value[index];
-        front = front + '<Column field="' + element.name + '" header="' + element.name + '" sortable style="min-width: 12rem"></Column>\n'
+        if (element.type == 'Date') {
+            front = front + '<Column field="' + element.name + '" header="' + await firstUpper(element.name) + '" sortable style="min-width: 4rem">\n' +
+                '<template #body="slotProps">{{ ((slotProps.data.' + element.name + ') + "").substring(0, 10) }} </template>\n</Column>\n'
+        } else {
+
+            front = front + '<Column field="' + element.name + '" header="' + await firstUpper(element.name) + '" sortable style="min-width: 4rem"></Column>\n'
+        }
     }
     front = front +
-        '            <Column :exportable="false" style="min-width: 12rem">\n' +
+        '            <Column :exportable="false" style="min-width: 4rem">\n' +
         '                <template #body="slotProps">\n' +
         '                    <Button icon="pi pi-pencil" outlined rounded class="mr-2" @click="editItem(slotProps.data)" />\n' +
         '                    <Button icon="pi pi-trash" outlined rounded severity="danger"\n' +
@@ -91,7 +96,7 @@ export const Frontend = async (tableId, tableName) => {
         '        </Dialog>\n' +
 
         '       <!-- //CREATE DIALOG -->\n' +
-        '       <Dialog v-model:visible="formDialog" :style="{ width:\'450px\' }" header="' + tableName + ' Details" :modal="true">\n' +
+        '       <Dialog v-model:visible="formDialog" :style="{ width:\'550px\' }" header="' + tableName + ' Details" :modal="true">\n' +
         '            <div class="flex flex-col gap-6">\n' +
         '                <img v-if="product.image"\n' +
         '                    :src="`https://primefaces.org/cdn/primevue/images/product/${product.image}`"\n' +
@@ -105,12 +110,31 @@ export const Frontend = async (tableId, tableName) => {
     front = front + ''
     for (let index = 0; index < koloms.value.length; index++) {
         const element = koloms.value[index];
-        front = front + '<div>\n' +
-            '                        <label for="' + element.name + '" class="block font-bold mb-3">' + element.name + '</label>\n' +
-            '                        <InputText rows="5" id="' + element.name + '" v-model.trim="item.' + element.name + '" required="false" fluid />\n' +
-            '                        <small v-if="submitted && !item.' + element.name + '" class="text-red-500">' + element.name + ' is required.</small>\n' +
-            '                    </div>\n'
+        if (element.type == 'Varchar') {
+            front = front + '<div>\n' +
+                '                        <label for="' + element.name + '" class="block font-bold mb-3">' + await firstUpper(element.name) + '</label>\n' +
+                '                        <InputText rows="5" id="' + element.name + '" v-model.trim="item.' + element.name + '" required="false" fluid />\n' +
+                '                        <small v-if="submitted && !item.' + element.name + '" class="text-red-500">' + element.name + ' is required.</small>\n' +
+                '                    </div>\n'
+        }
+        if (element.type == 'Date') {
+            front = front + '<div>\n' +
+                '                        <label for="' + element.name + '" class="block font-bold mb-3">' + await firstUpper(element.name) + '</label>\n' +
+                '                        <DatePicker :showIcon="true" :showButtonBar="true"rows="5" id="' + element.name + '" v-model.trim="item.' + element.name +
+                '" required="false" fluid ></DatePicker> \n' +
+                '                        <small v-if="submitted && !item.' + element.name + '" class="text-red-500">' + element.name + ' is required.</small>\n' +
+                '                    </div>\n'
+        }
+        if (element.type == 'Number') {
+            front = front + '<div>\n' +
+                '                        <label for="' + element.name + '" class="block font-bold mb-3">' + await firstUpper(element.name) + '</label>\n' +
+                '                        <InputNumber :showIcon="true" :showButtonBar="true"rows="5" id="' + element.name + '" v-model.trim="item.' + element.name +
+                '" required="false" fluid  showButtons mode="decimal"></InputNumber> \n' +
+                '                        <small v-if="submitted && !item.' + element.name + '" class="text-red-500">' + element.name + ' is required.</small>\n' +
+                '                    </div>\n'
+        }
     }
+
     front = front +
         '                    <div class="flex align-items-center gap-3 mb-5"></div>\n' +
         '                    <div class="flex justify-content-end gap-2">\n' +
@@ -120,10 +144,6 @@ export const Frontend = async (tableId, tableName) => {
         '                </form>\n' +
         '            </div>\n' +
         '        </Dialog>\n' +
-
-
-
-
         '   </div>\n' +
         '</div>\n' +
         '</template>'
@@ -132,7 +152,7 @@ export const Frontend = async (tableId, tableName) => {
     front = front +
         '<script setup>\n' +
         'import custumFetch from \'@/api\';\n' +
-        'import { useAuthStore } from \'@/stores/authStores\';\n' +
+        'import { useAuthStore } from \'@/stores/authStores\';\n import { dateFormat } from \'@/stores/util\';' +
         'import { FilterMatchMode } from \'@primevue/core/api\';\n' +
         'import { Toast } from \'primevue\';\n' +
         'import Column from \'primevue/column\';\n' +
@@ -184,10 +204,10 @@ export const Frontend = async (tableId, tableName) => {
         '    const paramCari = ((JSON.parse(JSON.stringify(filters.value))).global.value)\n' +
         '    let urlParam = ""\n' +
         '    if (paramCari) {\n' +
-        '        urlParam = \'&name=\' + paramCari\n' +
+        '        urlParam = \'&name=\' + paramCari\n' + '//sesuaikan ya dengan nama kolom pencariannya\n' +
         '    }\n' +
         '    try {\n' +
-        '        const { data } = await custumFetch.get("/' + tableName + 's/?page=" + pageNo.value + \'&size=\' + rowPerPage.value + urlParam,\n' +
+        '        const { data } = await custumFetch.get("/' + tablename + 's/?page=" + pageNo.value + \'&size=\' + rowPerPage.value + urlParam,\n' +
         '            {\n' +
         '                withCredentials: true,\n' +
         '                headers: {\n' +
@@ -207,7 +227,7 @@ export const Frontend = async (tableId, tableName) => {
         '}\n' +
         'async function deleteItem() {\n' +
         '    deleteDialog.value = false\n' +
-        '    const myasetDelete = await custumFetch.delete(\'/' + tableName + 's/\' + itemDelete.value.id,\n' +
+        '    const myasetDelete = await custumFetch.delete(\'/' + tablename + 's/\' + itemDelete.value.id,\n' +
         '        {\n' +
         '            withCredentials: true,\n' +
         '            headers: {\n' +
@@ -217,7 +237,7 @@ export const Frontend = async (tableId, tableName) => {
         '    )\n' +
         '    deleteDialog.value = false;\n' +
         '    itemDelete.value = {};\n' +
-        '    toast.add({ severity: \'success\', summary: \'Successful\', detail: \'Project Deleted\', life: 3000 });\n' +
+        '    toast.add({ severity: \'success\', summary: \'Successful\', detail: \'' + tableName + ' Deleted\', life: 3000 });\n' +
         '    searchData()\n' +
         '}\n' +
         '\n' +
@@ -230,18 +250,35 @@ export const Frontend = async (tableId, tableName) => {
         '\n' +
         '\n' +
         '//periksa unutk jenis update atau onsert\n' +
-        'const handleSubmit = async () => {\n' +
-        '    //unutk edit id sudah ada\n' +
-        '    if (item.value.id) {\n' +
-        '        try {\n' +
-        '            const results = await custumFetch.put("/' + tableName + 's/" + item.value.id,\n' +
-        '                {\n'
-    // '                    name: item.value.name,\n' +
-    // '                    desc: item.value.desc,\n' +
-    // front = front + ''
+        'const handleSubmit = async () => {\n'
+
+    front = front +
+        '    //untuk edit id sudah ada\n' +
+        '    if (item.value.id) {\n'
     for (let index = 0; index < koloms.value.length; index++) {
         const element = koloms.value[index];
-        front = front + ' ' + element.name + ' : ' + 'item.value.' + element.name + ',\n'
+        if (element.type == 'Date') {
+            front = front + 'let ' + element.name + '\n' +
+                'try {\n' +
+                '    ' + element.name + ' = await dateFormat(item.value.' + element.name + ')\n' +
+                '} catch (error) {\n' +
+                '   ' + element.name + ' = (item.value.' + element.name + ').substring(0, 10)\n' +
+                '}'
+        }
+    }
+
+
+
+    front = front + '        try {\n' +
+        '            const results = await custumFetch.put("/' + tablename + 's/" + item.value.id,\n' +
+        '                {\n'
+    for (let index = 0; index < koloms.value.length; index++) {
+        const element = koloms.value[index];
+        if (element.type == 'Date') {
+            front = front + '' + element.name + ': (' + element.name + ')'
+        } else {
+            front = front + ' ' + element.name + ' : ' + 'item.value.' + element.name + ',\n'
+        }
     }
     front = front +
         '                }, {\n' +
@@ -253,21 +290,33 @@ export const Frontend = async (tableId, tableName) => {
         '            )\n' +
         '            formDialog.value = false\n' +
         '            item.value = {}\n' +
-        '            toast.add({ severity: \'success\', summary: \'Successful\', detail: \'Create Project Success\', life: 3000 });\n' +
+        '            toast.add({ severity: \'success\', summary: \'Successful\', detail: \'Update ' + tableName + ' Success\', life: 3000 });\n' +
         '        } catch (error) {\n' +
         '            console.log(error)\n' +
         '        }\n' +
         '\n' +
-        '    } else {\n' +
-        '        try {\n' +
-        '            const results = await custumFetch.post("/' + tableName + 's",\n' +
+        '    } else {\n'
+
+    for (let index = 0; index < koloms.value.length; index++) {
+        const element = koloms.value[index];
+        if (element.type == 'Date') {
+            front = front + 'let ' + element.name + ' = await dateFormat(item.value.' + element.name + ')\n'
+        }
+    }
+
+
+
+    front = front + '        try {\n' +
+        '            const results = await custumFetch.post("/' + tablename + 's",\n' +
         '                {\n'
     for (let index = 0; index < koloms.value.length; index++) {
         const element = koloms.value[index];
-        front = front + ' ' + element.name + ' : ' + 'item.value.' + element.name + ',\n'
+        if (element.type == 'Date') {
+            front = front + '' + element.name + ': (' + element.name + ')'
+        } else {
+            front = front + ' ' + element.name + ' : ' + 'item.value.' + element.name + ',\n'
+        }
     }
-    // '                    name: item.value.name,\n' +
-    // '                    desc: item.value.desc,\n' +
     front = front +
         '                }, {\n' +
         '                withCredentials: true,\n' +
@@ -278,7 +327,7 @@ export const Frontend = async (tableId, tableName) => {
         '            )\n' +
         '            formDialog.value = false\n' +
         '            item.value = {}\n' +
-        '            toast.add({ severity: \'success\', summary: \'Successful\', detail: \'Create Project Success\', life: 3000 });\n' +
+        '            toast.add({ severity: \'success\', summary: \'Successful\', detail: \'Create ' + tableName + ' Success\', life: 3000 });\n' +
         '        } catch (error) {\n' +
         '            console.log(error)\n' +
         '        }\n' +
@@ -295,13 +344,21 @@ export const Frontend = async (tableId, tableName) => {
 
 
 export const Index = async (tableId, tableName) => {
+    const tablename = await replaceString(tableName)
     let index = ''
     index = index +
         '\n//index.js\n\n{\n' +
-        'path: \'/dev/' + tableName.toString() + '\',\n' +
-        'name: \'' + tableName + '\',\n' +
-        'component: () => import(\'@/views/dev/' + tableName.toString() + '.vue\')\n' +
+        'path: \'/dev/' + tablename + '\',\n' +
+        'name: \'' + tablename + '\',\n' +
+        'component: () => import(\'@/views/dev/' + tableName + '.vue\')\n' +
         '},\n\n\n\n\n' +
-        '//AppMenu.vue \n\n{ label: \'' + tableName.toString() + '\', icon: \'pi pi-fw pi-car\', to: { name: \'' + tableName.toString() + '\' } }'
+        '//AppMenu.vue \n\n{ label: \'' + tablename + '\', icon: \'pi pi-fw pi-car\', to: { name: \'' + tablename + '\' } }\n'
+
+
+
+    //cretae  file
+    const frontProject = "/Users/macbook/Mugi_data/workspace/typescript/sakai-vue-crud-generator/src"
+    const viewFolder = '/views'
+    index = index + 'touch ' + frontProject + viewFolder + '/dev/' + tableName + '.vue'
     return index
 }

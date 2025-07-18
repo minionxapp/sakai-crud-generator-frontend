@@ -43,6 +43,22 @@ const router = createRouter({
                     component: () => import('@/views/dev/Coba.vue')
                 },
                 {
+                    path: '/dev/testaja',
+                    name: 'testaja',
+                    component: () => import('@/views/dev/test_aja.vue')
+                },
+                {
+                    path: '/dev/devdirektoris',
+                    name: 'dev_direktori',
+                    component: () => import('@/views/dev/dev_direktori.vue')
+                },
+                {
+                    path: '/dev/group',
+                    name: 'group',
+                    component: () => import('@/views/dev/group.vue')
+                },
+
+                {
                     path: '/',
                     name: 'dashboard',
                     component: () => import('@/views/Dashboard.vue')
@@ -137,7 +153,34 @@ const router = createRouter({
                     path: '/documentation',
                     name: 'documentation',
                     component: () => import('@/views/pages/Documentation.vue')
-                }
+                },
+                {
+                    path: '/dev/pmakai',
+                    name: 'pmakai',
+                    component: () => import('@/views/dev/pmakai.vue')
+                },
+                {
+                    path: '/dev/Jobfamily',
+                    name: 'Jobfamily',
+                    component: () => import('@/views/dev/Job_family.vue')
+                },
+                {
+                    path: '/dev/Subjobfamily',
+                    name: 'Subjobfamily',
+                    component: () => import('@/views/dev/Sub_job_family.vue')
+                },
+                {
+                    path: '/dev/Kompetensi',
+                    name: 'Kompetensi',
+                    component: () => import('@/views/dev/Kompetensi.vue')
+                },
+                // Development
+                // {
+                //     path: '/dev/user',
+                //     name: 'user',
+                //     component: () => import('@/views/dev/user.vue')
+                // },
+
             ]
 
         },
