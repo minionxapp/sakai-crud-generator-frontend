@@ -174,6 +174,21 @@ const router = createRouter({
                     name: 'Kompetensi',
                     component: () => import('@/views/dev/Kompetensi.vue')
                 },
+                {
+                    path: '/dev/akademi',
+                    name: 'akademi',
+                    component: () => import('@/views/dev/akademi.vue')
+                },
+                {
+                    path: '/dev/user',
+                    name: 'user',
+                    component: () => import('@/views/dev/user.vue')
+                },
+                {
+                    path: '/dev/Userakademi',
+                    name: 'Userakademi',
+                    component: () => import('@/views/dev/User_akademi.vue')
+                },
                 // Development
                 // {
                 //     path: '/dev/user',

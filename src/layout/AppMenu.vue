@@ -14,10 +14,13 @@ const model = ref([
     {
         label: 'Admin',
         items: [
+            { label: 'User', icon: 'pi pi-fw pi-car', to: { name: 'user' } },
             { label: 'Group', icon: 'pi pi-fw pi-users', to: { name: 'group' } },
             { label: 'Job Family', icon: 'pi pi-fw pi-briefcase', to: { name: 'Jobfamily' } },
             { label: 'Sub Job Family', icon: 'pi pi-fw pi-paperclip', to: { name: 'Subjobfamily' } },
-            { label: 'Kompetensi', icon: 'pi pi-fw pi-slack', to: { name: 'Kompetensi' } }
+            { label: 'Kompetensi', icon: 'pi pi-fw pi-slack', to: { name: 'Kompetensi' } },
+            { label: 'akademi', icon: 'pi pi-fw pi-globe', to: { name: 'akademi' } },
+            { label: 'User Akademi', icon: 'pi pi-fw pi-android', to: { name: 'Userakademi' } }
         ]
     },
     {
