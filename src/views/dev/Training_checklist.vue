@@ -20,7 +20,7 @@
                 currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products">
                 <template #header>
                     <div class="flex flex-wrap gap-2 items-center justify-between">
-                        <h4 class="m-0">Manage Sub Job Family</h4>
+                        <h4 class="m-0">Manage Training_checklist</h4>
                         <IconField>
                             <InputIcon @click="searchData()">
                                 <i class=" pi pi-search" />
@@ -32,10 +32,14 @@
 
                 <Column selectionMode="multiple" style="width: 3rem" :exportable="false"></Column>
                 <Column field="id" header="Id" sortable style="min-width: 4rem"></Column>
-                <Column field="kode" header="Kode" sortable style="min-width: 4rem"></Column>
-                <Column field="kode_job_family" header="Kode_job_family" sortable style="min-width: 4rem"></Column>
-                <Column field="nama" header="Nama" sortable style="min-width: 4rem"></Column>
-                <Column field="desc" header="Desc" sortable style="min-width: 4rem"></Column>
+                <Column field="training_kode" header="Training_kode" sortable style="min-width: 4rem"></Column>
+                <Column field="checklist_kode" header="Checklist_kode" sortable style="min-width: 4rem"></Column>
+                <Column field="file_1" header="File_1" sortable style="min-width: 4rem"></Column>
+                <Column field="file_2" header="File_2" sortable style="min-width: 4rem"></Column>
+                <Column field="file_3" header="File_3" sortable style="min-width: 4rem"></Column>
+                <Column field="file_4" header="File_4" sortable style="min-width: 4rem"></Column>
+                <Column field="status" header="Status" sortable style="min-width: 4rem"></Column>
+                <Column field="checklist_name" header="Checklist_name" sortable style="min-width: 4rem"></Column>
                 <Column :exportable="false" style="min-width: 4rem">
                     <template #body="slotProps">
                         <Button icon="pi pi-pencil" outlined rounded class="mr-2" @click="editItem(slotProps.data)" />
@@ -56,7 +60,7 @@
                 </template>
             </Dialog>
             <!-- //CREATE DIALOG -->
-            <Dialog v-model:visible="formDialog" :style="{ width: '550px' }" header="Sub_job_family Details"
+            <Dialog v-model:visible="formDialog" :style="{ width: '550px' }" header="Training_checklist Details"
                 :modal="true">
                 <div class="flex flex-col gap-6">
                     <img v-if="product.image"
@@ -69,28 +73,50 @@
                                 fluid readonly="true" hidden />
                         </div>
                         <div>
-                            <label for="kode" class="block font-bold mb-3">Kode</label>
-                            <InputText rows="5" id="kode" v-model.trim="item.kode" required="false" fluid />
-                            <small v-if="submitted && !item.kode" class="text-red-500">kode is required.</small>
-                        </div>
-                        <div>
-                            <label for="kode_job_family" class="block font-bold mb-3">Job Family</label>
-                            <Select id="kode_job_family" v-model="item.kode_job_family" :options="jobFamily"
-                                optionLabel="nama" optionValue="kode" placeholder="Job Family" class="w-full"></Select>
-                            <!-- <InputText rows="5" id="kode_job_family" v-model.trim="item.kode_job_family"
-                                required="false" fluid /> -->
-                            <small v-if="submitted && !item.kode_job_family" class="text-red-500">kode_job_family is
+                            <label for="training_kode" class="block font-bold mb-3">Training_kode</label>
+                            <InputText rows="5" id="training_kode" v-model.trim="item.training_kode" required="false"
+                                fluid />
+                            <small v-if="submitted && !item.training_kode" class="text-red-500">training_kode is
                                 required.</small>
                         </div>
                         <div>
-                            <label for="nama" class="block font-bold mb-3">Nama</label>
-                            <InputText rows="5" id="nama" v-model.trim="item.nama" required="false" fluid />
-                            <small v-if="submitted && !item.nama" class="text-red-500">nama is required.</small>
+                            <label for="checklist_kode" class="block font-bold mb-3">Checklist_kode</label>
+                            <InputText rows="5" id="checklist_kode" v-model.trim="item.checklist_kode" required="false"
+                                fluid />
+                            <small v-if="submitted && !item.checklist_kode" class="text-red-500">checklist_kode is
+                                required.</small>
                         </div>
                         <div>
-                            <label for="desc" class="block font-bold mb-3">Desc</label>
-                            <InputText rows="5" id="desc" v-model.trim="item.desc" required="false" fluid />
-                            <small v-if="submitted && !item.desc" class="text-red-500">desc is required.</small>
+                            <label for="file_1" class="block font-bold mb-3">File_1</label>
+                            <InputText rows="5" id="file_1" v-model.trim="item.file_1" required="false" fluid />
+                            <small v-if="submitted && !item.file_1" class="text-red-500">file_1 is required.</small>
+                        </div>
+                        <div>
+                            <label for="file_2" class="block font-bold mb-3">File_2</label>
+                            <InputText rows="5" id="file_2" v-model.trim="item.file_2" required="false" fluid />
+                            <small v-if="submitted && !item.file_2" class="text-red-500">file_2 is required.</small>
+                        </div>
+                        <div>
+                            <label for="file_3" class="block font-bold mb-3">File_3</label>
+                            <InputText rows="5" id="file_3" v-model.trim="item.file_3" required="false" fluid />
+                            <small v-if="submitted && !item.file_3" class="text-red-500">file_3 is required.</small>
+                        </div>
+                        <div>
+                            <label for="file_4" class="block font-bold mb-3">File_4</label>
+                            <InputText rows="5" id="file_4" v-model.trim="item.file_4" required="false" fluid />
+                            <small v-if="submitted && !item.file_4" class="text-red-500">file_4 is required.</small>
+                        </div>
+                        <div>
+                            <label for="status" class="block font-bold mb-3">Status</label>
+                            <InputText rows="5" id="status" v-model.trim="item.status" required="false" fluid />
+                            <small v-if="submitted && !item.status" class="text-red-500">status is required.</small>
+                        </div>
+                        <div>
+                            <label for="checklist_name" class="block font-bold mb-3">Checklist_name</label>
+                            <InputText rows="5" id="checklist_name" v-model.trim="item.checklist_name" required="false"
+                                fluid />
+                            <small v-if="submitted && !item.checklist_name" class="text-red-500">checklist_name is
+                                required.</small>
                         </div>
                         <div class="flex align-items-center gap-3 mb-5"></div>
                         <div class="flex justify-content-end gap-2">
@@ -111,8 +137,9 @@ import { Toast } from 'primevue';
 import Column from 'primevue/column';
 import DataTable from 'primevue/datatable';
 import { useToast } from 'primevue/usetoast';
-import { onMounted, ref } from 'vue';
+import { defineProps, onMounted, ref, watch } from 'vue';
 import AlertMessage from '../../components/AlertMessage.vue';
+
 const autStores = useAuthStore();
 const { currentUser, currentToken, getToken } = autStores
 const dt = ref();
@@ -122,9 +149,7 @@ const deleteDialog = ref(false);
 const product = ref({});
 const selectedItems = ref();
 const submitted = ref(false);
-const filters = ref({
-    global: { value: null, matchMode: FilterMatchMode.CONTAINS }
-});
+const filters = ref({ global: { value: null, matchMode: FilterMatchMode.CONTAINS } });
 const results = ref()
 const errorMsg = ref(false)
 const errorAlert = ref("")
@@ -135,10 +160,22 @@ const itemDelete = ref()
 const pageNo = ref()
 const jmlRows = ref(0)
 const rowPerPage = ref(10)
-const jobFamily = ref([])
+
+const propsx = defineProps(['data'])
 
 
 
+// watch([propsx.data], () => {
+//     alert("kkkkkkkkkk......")
+//     // chartData.value = setChartData();
+//     // chartOptions.value = setChartOptions();
+// });
+const x = ref(0)
+const y = ref(0)
+watch(propsx.data, (newX) => {
+    alert("kkkkkkkkkk......")
+    console.log(`x is ${newX}`)
+})
 
 async function onPageChange(event) {
     pageNo.value = event.page + 1
@@ -146,6 +183,7 @@ async function onPageChange(event) {
     searchData()
 }
 function openNew() {
+    alert(propsx.data)
     item.value = ({})
     submitted.value = false;
     formDialog.value = true;
@@ -155,15 +193,18 @@ const hideDialog = () => {
     submitted.value = false;
 }
 
+const TestMugi = () => {
+    alert("yeueiuriueyriueyiruerere")
+}
 const searchData = async () => {
     const paramCari = ((JSON.parse(JSON.stringify(filters.value))).global.value)
     let urlParam = ""
     if (paramCari) {
-        urlParam = '&nama=' + paramCari
+        urlParam = '&name=' + paramCari
         //sesuaikan ya dengan nama kolom pencariannya
     }
     try {
-        const { data } = await custumFetch.get("/Subjobfamilys/?page=" + pageNo.value + '&size=' + rowPerPage.value + urlParam,
+        const { data } = await custumFetch.get("/Trainingchecklists/?page=" + pageNo.value + '&size=' + rowPerPage.value + urlParam,
             {
                 withCredentials: true,
                 headers: {
@@ -183,7 +224,7 @@ function confirmDeleteItem(value) {
 }
 async function deleteItem() {
     deleteDialog.value = false
-    const myasetDelete = await custumFetch.delete('/Subjobfamilys/' + itemDelete.value.id,
+    const myasetDelete = await custumFetch.delete('/Trainingchecklists/' + itemDelete.value.id,
         {
             withCredentials: true,
             headers: {
@@ -193,7 +234,7 @@ async function deleteItem() {
     )
     deleteDialog.value = false;
     itemDelete.value = {};
-    toast.add({ severity: 'success', summary: 'Successful', detail: 'Sub_job_family Deleted', life: 3000 });
+    toast.add({ severity: 'success', summary: 'Successful', detail: 'Training_checklist Deleted', life: 3000 });
     searchData()
 }
 
@@ -210,12 +251,16 @@ const handleSubmit = async () => {
     //untuk edit id sudah ada
     if (item.value.id) {
         try {
-            const results = await custumFetch.put("/Subjobfamilys/" + item.value.id,
+            const results = await custumFetch.put("/Trainingchecklists/" + item.value.id,
                 {
-                    kode: item.value.kode,
-                    kode_job_family: item.value.kode_job_family,
-                    nama: item.value.nama,
-                    desc: item.value.desc,
+                    training_kode: item.value.training_kode,
+                    checklist_kode: item.value.checklist_kode,
+                    file_1: item.value.file_1,
+                    file_2: item.value.file_2,
+                    file_3: item.value.file_3,
+                    file_4: item.value.file_4,
+                    status: item.value.status,
+                    checklist_name: item.value.checklist_name,
                 }, {
                 withCredentials: true,
                 headers: {
@@ -225,19 +270,23 @@ const handleSubmit = async () => {
             )
             formDialog.value = false
             item.value = {}
-            toast.add({ severity: 'success', summary: 'Successful', detail: 'Update Sub_job_family Success', life: 3000 });
+            toast.add({ severity: 'success', summary: 'Successful', detail: 'Update Training_checklist Success', life: 3000 });
         } catch (error) {
             console.log(error)
         }
 
     } else {
         try {
-            const results = await custumFetch.post("/Subjobfamilys",
+            const results = await custumFetch.post("/Trainingchecklists",
                 {
-                    kode: item.value.kode,
-                    kode_job_family: item.value.kode_job_family,
-                    nama: item.value.nama,
-                    desc: item.value.desc,
+                    training_kode: item.value.training_kode,
+                    checklist_kode: item.value.checklist_kode,
+                    file_1: item.value.file_1,
+                    file_2: item.value.file_2,
+                    file_3: item.value.file_3,
+                    file_4: item.value.file_4,
+                    status: item.value.status,
+                    checklist_name: item.value.checklist_name,
                 }, {
                 withCredentials: true,
                 headers: {
@@ -247,7 +296,7 @@ const handleSubmit = async () => {
             )
             formDialog.value = false
             item.value = {}
-            toast.add({ severity: 'success', summary: 'Successful', detail: 'Create Sub_job_family Success', life: 3000 });
+            toast.add({ severity: 'success', summary: 'Successful', detail: 'Create Training_checklist Success', life: 3000 });
         } catch (error) {
             console.log(error)
         }
@@ -255,28 +304,35 @@ const handleSubmit = async () => {
     searchData()
 }
 onMounted(async () => {
-    pageNo.value = 1
-    searchData()
-    getJobFamily()
-});
-
-
-
-
-
-const getJobFamily = async () => {
-    try {
-        const { data } = await custumFetch.get("/jobfamilys" + '?size=99',
-            {
-                withCredentials: true,
-                headers: {
-                    "X-API-TOKEN": await getToken()
-                },
-            }
-        )
-        jobFamily.value = data.data
-    } catch (error) {
-        console.log(error)
+    alert("training ceklist" + propsx.data)
+    if (propsx.data === undefined) {
+        pageNo.value = 1
+        searchData()
+    } else {
+        pageNo.value = 1
+        const paramCari = propsx.data//((JSON.parse(JSON.stringify(filters.value))).global.value)
+        let urlParam = ""
+        urlParam = '&training_kode=' + paramCari
+        try {
+            const { data } = await custumFetch.get("/Trainingchecklists/?page=" + pageNo.value + '&size=' + rowPerPage.value + urlParam,
+                {
+                    withCredentials: true,
+                    headers: {
+                        "X-API-TOKEN": await getToken()
+                    },
+                }
+            )
+            results.value = data.data
+            jmlRows.value = data.paging.total_rows
+        } catch (error) {
+            console.log(error)
+        }
     }
+});
+function test() {
+    alert("tetstststststststsststststkjsahd skjdh ksdjhs kjskajh ")
 }
+defineExpose({
+    test
+});
 </script>

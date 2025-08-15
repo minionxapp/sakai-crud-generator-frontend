@@ -66,6 +66,7 @@ const submit2 = async () => {
             }
         )
         result.value = data.data
+        alert("Create Success.......")
     } catch (error) {
         console.log(error)
     }

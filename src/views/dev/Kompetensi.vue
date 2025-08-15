@@ -324,7 +324,7 @@ const getSubJobFamily = async () => {
             }
         )
         subJobFamily.value = data.data
-        console.log(subJobFamily.value)
+        // console.log(subJobFamily.value)
     } catch (error) {
         console.log(error)
     }

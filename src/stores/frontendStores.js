@@ -159,7 +159,7 @@ export const Frontend = async (tableId, tableName) => {
         'import DataTable from \'primevue/datatable\';\n' +
         'import { useToast } from \'primevue/usetoast\';\n' +
         'import { onMounted, ref } from \'vue\';\n' +
-        'import AlertMessage from \'../../components/AlertMessage.vue\';\n' +
+        'import AlertMessage from \'../../components/AlertMessage.vue\';\n\n' +
 
         'const autStores = useAuthStore();\n' +
         'const { currentUser, currentToken, getToken } = autStores\n' +
@@ -171,8 +171,8 @@ export const Frontend = async (tableId, tableName) => {
         'const product = ref({});\n' +
         'const selectedItems = ref();\n' +
         'const submitted = ref(false);\n' +
-        'const filters = ref({\n' +
-        '    global: { value: null, matchMode: FilterMatchMode.CONTAINS }\n' +
+        'const filters = ref({' +
+        '    global: { value: null, matchMode: FilterMatchMode.CONTAINS }' +
         '});\n' +
         'const results = ref()\n' +
         'const errorMsg = ref(false)\n' +
@@ -183,7 +183,7 @@ export const Frontend = async (tableId, tableName) => {
         'const itemDelete = ref()\n' +
         'const pageNo = ref()\n' +
         'const jmlRows = ref(0)\n' +
-        'const rowPerPage = ref(10)\n' +
+        'const rowPerPage = ref(10)\n\n' +
         'async function onPageChange(event) {\n' +
         '    pageNo.value = event.page + 1\n' +
         '    rowPerPage.value = event.rows\n' +
@@ -275,7 +275,7 @@ export const Frontend = async (tableId, tableName) => {
     for (let index = 0; index < koloms.value.length; index++) {
         const element = koloms.value[index];
         if (element.type == 'Date') {
-            front = front + '' + element.name + ': (' + element.name + ')'
+            front = front + '' + element.name + ': (' + element.name + '),\n'
         } else {
             front = front + ' ' + element.name + ' : ' + 'item.value.' + element.name + ',\n'
         }
@@ -312,7 +312,7 @@ export const Frontend = async (tableId, tableName) => {
     for (let index = 0; index < koloms.value.length; index++) {
         const element = koloms.value[index];
         if (element.type == 'Date') {
-            front = front + '' + element.name + ': (' + element.name + ')'
+            front = front + '' + element.name + ': (' + element.name + '),\n'
         } else {
             front = front + ' ' + element.name + ' : ' + 'item.value.' + element.name + ',\n'
         }
@@ -349,16 +349,41 @@ export const Index = async (tableId, tableName) => {
     index = index +
         '\n//index.js\n\n{\n' +
         'path: \'/dev/' + tablename + '\',\n' +
-        'name: \'' + tablename + '\',\n' +
-        'component: () => import(\'@/views/dev/' + tableName + '.vue\')\n' +
+        'name: \'' + await firstUpper(tablename) + '\',\n' +
+        'component: () => import(\'@/views/dev/' + await firstUpper(tableName) + '.vue\')\n' +
         '},\n\n\n\n\n' +
-        '//AppMenu.vue \n\n{ label: \'' + tablename + '\', icon: \'pi pi-fw pi-car\', to: { name: \'' + tablename + '\' } }\n'
+        '//AppMenu.vue \n\n{ label: \'' + await firstUpper(tablename) + '\', icon: \'pi pi-fw pi-car\', to: { name: \'' + tablename + '\' } }\n'
 
 
 
     //cretae  file
-    const frontProject = "/Users/macbook/Mugi_data/workspace/typescript/sakai-vue-crud-generator/src"
+    const paramCari = 'tester'
+    let urlParam = ""
+    const folderFrontend = ref()
+    if (paramCari) {
+        urlParam = '&username=' + paramCari
+    }
+    try {
+        const { data } = await custumFetch.get("/devdirektoris/?" + tableId + urlParam,
+            {
+                withCredentials: true,
+                headers: {
+                    "X-API-TOKEN": await getToken()
+                },
+            }
+        )
+        folderFrontend.value = data.data[0].frontend
+        // console.log(folderFrontend.value)
+    } catch (error) {
+        console.log(error)
+    }
+
+    const frontProject = folderFrontend.value + "src" //"/Users/macbook/Mugi_data/workspace/typescript/sakai-vue-crud-generator/src"
     const viewFolder = '/views'
-    index = index + 'touch ' + frontProject + viewFolder + '/dev/' + tableName + '.vue'
+    index = index + 'touch ' + frontProject + viewFolder + '/dev/' + await firstUpper(tableName) + '.vue\n\n'
+
+    index = index + '//tambahan untuk select option\n. const yesNo = ref([{ name: \'Yes\', code: \'Y\' }, { name: \'No\', code: \'N\' }])\n' +
+        '<Select id="aktive" v-model="item.aktive" :options="yesNo" optionLabel="name"\n' +
+        'optionValue="code" placeholder="Aktive" class="w-full"></Select>\n'
     return index
 }

@@ -5,6 +5,8 @@
             <Toolbar class="mb-6">
                 <template #start>
                     <Button label="New" icon="pi pi-plus" severity="secondary" class="mr-2" @click="openNew" />
+                    <!-- <Button label="Delete" icon="pi pi-trash" severity="secondary" @click="confirmDeleteItem"
+                    :disabled="!selectedProducts || !selectedProducts.length" /> -->
                 </template>
                 <template #end>
                     <Button label="Export" icon="pi pi-upload" severity="secondary" @click="exportCSV($event)" />
@@ -18,29 +20,21 @@
                 currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products">
                 <template #header>
                     <div class="flex flex-wrap gap-2 items-center justify-between">
-                        <h4 class="m-0">Manage user</h4>
+                        <h4 class="m-0">Manage Kompetensi_level</h4>
                         <IconField>
-                            <!-- <InputIcon @click="searchData()">
+                            <InputIcon @click="searchData()">
                                 <i class=" pi pi-search" />
-                            </InputIcon> -->
-                            <InputText v-model="filters['global'].value" placeholder="Search..." />&nbsp;&nbsp;
-                            <Button label="Cari" icon="pi pi-search" severity="secondary" @click="searchData" />
+                            </InputIcon>
+                            <InputText v-model="filters['global'].value" placeholder="Search..." />
                         </IconField>
                     </div>
                 </template>
 
                 <Column selectionMode="multiple" style="width: 3rem" :exportable="false"></Column>
-                <!-- <Column field="id" header="Id" sortable style="min-width: 4rem"></Column> -->
-                <Column field="username" header="Username" sortable style="min-width: 4rem"></Column>
-                <!-- <Column field="password" header="Password" sortable style="min-width: 4rem"></Column> -->
-                <Column field="name" header="Name" sortable style="min-width: 4rem"></Column>
-                <!-- <Column field="token" header="Token" sortable style="min-width: 4rem"></Column> -->
+                <Column field="id" header="Id" sortable style="min-width: 4rem"></Column>
+                <Column field="kode" header="Kode" sortable style="min-width: 4rem"></Column>
+                <Column field="nama" header="Nama" sortable style="min-width: 4rem"></Column>
                 <Column field="status" header="Status" sortable style="min-width: 4rem"></Column>
-                <Column field="email" header="Email" sortable style="min-width: 4rem"></Column>
-                <Column field="group" header="Group" sortable style="min-width: 4rem"></Column>
-                <Column field="expired" header="Expired" sortable style="min-width: 4rem">
-                    <template #body="slotProps">{{ ((slotProps.data.expired) + "").substring(0, 10) }} </template>
-                </Column>
                 <Column :exportable="false" style="min-width: 4rem">
                     <template #body="slotProps">
                         <Button icon="pi pi-pencil" outlined rounded class="mr-2" @click="editItem(slotProps.data)" />
@@ -61,59 +55,34 @@
                 </template>
             </Dialog>
             <!-- //CREATE DIALOG -->
-            <Dialog v-model:visible="formDialog" :style="{ width: '550px' }" header="user Details" :modal="true">
+            <Dialog v-model:visible="formDialog" :style="{ width: '550px' }" header="Kompetensi_level Details"
+                :modal="true">
                 <div class="flex flex-col gap-6">
                     <img v-if="product.image"
                         :src="`https://primefaces.org/cdn/primevue/images/product/${product.image}`"
                         :alt="product.image" class="block m-auto pb-4" />
-                    <form @submit.prevent="handleSubmit" autocomplete="off">
+                    <form @submit.prevent="handleSubmit">
                         <AlertMessage v-if="errorAlert" :message="errorMsg" />
                         <div>
                             <InputText id="id" v-model.trim="item.id" required="false" :invalid="submitted && !item.id"
                                 fluid readonly="true" hidden />
                         </div>
                         <div>
-                            <label for="username" class="block font-bold mb-3">Username</label>
-                            <InputText rows="5" id="username" v-model.trim="item.username" required="false" fluid />
-                            <small v-if="submitted && !item.username" class="text-red-500">username is required.</small>
-                        </div>
-                        <div v-if="!editChek">
-                            <label for="password" class="block font-bold mb-3">Password</label>
-                            <InputText rows="5" id="password" v-model.trim="item.password" fluid />
-                            <small v-if="submitted && !item.password" class="text-red-500">password is required.</small>
+                            <label for="kode" class="block font-bold mb-3">Kode</label>
+                            <InputText rows="5" id="kode" v-model.trim="item.kode" required="false" fluid />
+                            <small v-if="submitted && !item.kode" class="text-red-500">kode is required.</small>
                         </div>
                         <div>
-                            <label for="name" class="block font-bold mb-3">Name</label>
-                            <InputText rows="5" id="name" v-model.trim="item.name" required="false" fluid />
-                            <small v-if="submitted && !item.name" class="text-red-500">name is required.</small>
+                            <label for="nama" class="block font-bold mb-3">Nama</label>
+                            <InputText rows="5" id="nama" v-model.trim="item.nama" required="false" fluid />
+                            <small v-if="submitted && !item.nama" class="text-red-500">nama is required.</small>
                         </div>
-                        <!-- <div>
-                            <label for="token" class="block font-bold mb-3">Token</label>
-                            <InputText rows="5" id="token" v-model.trim="item.token" fluid />
-                        </div> -->
                         <div>
                             <label for="status" class="block font-bold mb-3">Status</label>
                             <!-- <InputText rows="5" id="status" v-model.trim="item.status" required="false" fluid /> -->
                             <Select id="status" v-model="item.status" :options="yesNo" optionLabel="name"
-                                optionValue="code" placeholder="status" class="w-full"></Select>
+                                optionValue="code" placeholder="Status" class="w-full"></Select>
                             <small v-if="submitted && !item.status" class="text-red-500">status is required.</small>
-                        </div>
-                        <div>
-                            <label for="email" class="block font-bold mb-3">Email</label>
-                            <InputText rows="5" id="email" v-model.trim="item.email" fluid />
-                        </div>
-                        <div>
-                            <label for="group" class="block font-bold mb-3">Group</label>
-                            <!-- <InputText rows="5" id="group" v-model.trim="item.group" fluid /> -->
-                            <Select id="group" v-model="item.group" :options="groups" optionLabel="name"
-                                optionValue="name" placeholder="Group" class="w-full"></Select>
-                            <small v-if="submitted && !item.group" class="text-red-500">group is required.</small>
-                        </div>
-                        <div>
-                            <label for="expired" class="block font-bold mb-3">Expired</label>
-                            <DatePicker :showIcon="true" :showButtonBar="true" rows="5" id="expired"
-                                v-model.trim="item.expired" required="false" fluid></DatePicker>
-                            <small v-if="submitted && !item.expired" class="text-red-500">expired is required.</small>
                         </div>
                         <div class="flex align-items-center gap-3 mb-5"></div>
                         <div class="flex justify-content-end gap-2">
@@ -129,7 +98,6 @@
 <script setup>
 import custumFetch from '@/api';
 import { useAuthStore } from '@/stores/authStores';
-import { dateFormat } from '@/stores/util';
 import { FilterMatchMode } from '@primevue/core/api';
 import { Toast } from 'primevue';
 import Column from 'primevue/column';
@@ -137,6 +105,7 @@ import DataTable from 'primevue/datatable';
 import { useToast } from 'primevue/usetoast';
 import { onMounted, ref } from 'vue';
 import AlertMessage from '../../components/AlertMessage.vue';
+
 const autStores = useAuthStore();
 const { currentUser, currentToken, getToken } = autStores
 const dt = ref();
@@ -146,10 +115,7 @@ const deleteDialog = ref(false);
 const product = ref({});
 const selectedItems = ref();
 const submitted = ref(false);
-const editChek = ref(false)
-const filters = ref({
-    global: { value: null, matchMode: FilterMatchMode.CONTAINS }
-});
+const filters = ref({ global: { value: null, matchMode: FilterMatchMode.CONTAINS } });
 const results = ref()
 const errorMsg = ref(false)
 const errorAlert = ref("")
@@ -161,7 +127,6 @@ const pageNo = ref()
 const jmlRows = ref(0)
 const rowPerPage = ref(10)
 const yesNo = ref([{ name: 'Yes', code: 'Y' }, { name: 'No', code: 'N' }])
-const groups = ref([])
 
 
 async function onPageChange(event) {
@@ -170,7 +135,6 @@ async function onPageChange(event) {
     searchData()
 }
 function openNew() {
-    editChek.value = false
     item.value = ({})
     submitted.value = false;
     formDialog.value = true;
@@ -188,7 +152,7 @@ const searchData = async () => {
         //sesuaikan ya dengan nama kolom pencariannya
     }
     try {
-        const { data } = await custumFetch.get("/users/?page=" + pageNo.value + '&size=' + rowPerPage.value + urlParam,
+        const { data } = await custumFetch.get("/Kompetensilevels/?page=" + pageNo.value + '&size=' + rowPerPage.value + urlParam,
             {
                 withCredentials: true,
                 headers: {
@@ -208,7 +172,7 @@ function confirmDeleteItem(value) {
 }
 async function deleteItem() {
     deleteDialog.value = false
-    const myasetDelete = await custumFetch.delete('/users/' + itemDelete.value.username,
+    const myasetDelete = await custumFetch.delete('/Kompetensilevels/' + itemDelete.value.id,
         {
             withCredentials: true,
             headers: {
@@ -218,7 +182,7 @@ async function deleteItem() {
     )
     deleteDialog.value = false;
     itemDelete.value = {};
-    toast.add({ severity: 'success', summary: 'Successful', detail: 'user Deleted', life: 3000 });
+    toast.add({ severity: 'success', summary: 'Successful', detail: 'Kompetensi_level Deleted', life: 3000 });
     searchData()
 }
 
@@ -227,64 +191,19 @@ function editItem(dataRow) {
     edit.value = true
     item.value = { ...dataRow };
     formDialog.value = true;
-    editChek.value = true
 }
 
 
 //periksa unutk jenis update atau onsert
 const handleSubmit = async () => {
     //untuk edit id sudah ada
-    //ceknya dari tombol aja ya coooyy
-    if (editChek.value) {
-        if (!item.value.expired) {
-            alert("Expired date harus diisi......!")
-        }
-        else {
-            let expired
-            try {
-                expired = await dateFormat(item.value.expired)
-            } catch (error) {
-                expired = (item.value.expired).substring(0, 10)
-            }
-            try {
-                const results = await custumFetch.put("/users/" + item.value.username,
-                    {
-                        username: item.value.username,
-                        name: item.value.name,
-                        token: item.value.token,
-                        status: item.value.status,
-                        email: item.value.email,
-                        group: item.value.group,
-                        expired: (expired)
-                    }, {
-                    withCredentials: true,
-                    headers: {
-                        "X-API-TOKEN": await getToken()
-                    },
-                }
-                )
-                formDialog.value = false
-                item.value = {}
-                editChek.value = false
-                toast.add({ severity: 'success', summary: 'Successful', detail: 'Update user Success', life: 3000 });
-            } catch (error) {
-                toast.add({ severity: 'Error', summary: 'Error', detail: 'Update user GAGAL', life: 3000 });
-                console.log(error)
-            }
-        }
-    } else {
-        let expired = await dateFormat(item.value.expired)
+    if (item.value.id) {
         try {
-            const results = await custumFetch.post("/users",
+            const results = await custumFetch.put("/Kompetensilevels/" + item.value.id,
                 {
-                    username: item.value.username,
-                    password: item.value.password,
-                    name: item.value.name,
-                    token: item.value.token,
+                    kode: item.value.kode,
+                    nama: item.value.nama,
                     status: item.value.status,
-                    email: item.value.email,
-                    group: item.value.group,
-                    expired: (expired)
                 }, {
                 withCredentials: true,
                 headers: {
@@ -294,7 +213,28 @@ const handleSubmit = async () => {
             )
             formDialog.value = false
             item.value = {}
-            toast.add({ severity: 'success', summary: 'Successful', detail: 'Create user Success', life: 3000 });
+            toast.add({ severity: 'success', summary: 'Successful', detail: 'Update Kompetensi_level Success', life: 3000 });
+        } catch (error) {
+            console.log(error)
+        }
+
+    } else {
+        try {
+            const results = await custumFetch.post("/Kompetensilevels",
+                {
+                    kode: item.value.kode,
+                    nama: item.value.nama,
+                    status: item.value.status,
+                }, {
+                withCredentials: true,
+                headers: {
+                    "X-API-TOKEN": await getToken()
+                },
+            }
+            )
+            formDialog.value = false
+            item.value = {}
+            toast.add({ severity: 'success', summary: 'Successful', detail: 'Create Kompetensi_level Success', life: 3000 });
         } catch (error) {
             console.log(error)
         }
@@ -304,24 +244,5 @@ const handleSubmit = async () => {
 onMounted(async () => {
     pageNo.value = 1
     searchData()
-    getGroup()
 });
-
-
-const getGroup = async () => {
-    try {
-        const { data } = await custumFetch.get("/groups" + '?size=99',
-            {
-                withCredentials: true,
-                headers: {
-                    "X-API-TOKEN": await getToken()
-                },
-            }
-        )
-        groups.value = data.data
-    } catch (error) {
-        console.log(error)
-    }
-}
-
 </script>

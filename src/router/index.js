@@ -1,6 +1,9 @@
 import AppLayout from '@/layout/AppLayout.vue';
 import { useAuthStore } from '@/stores/authStores';
 import { createRouter, createWebHistory } from 'vue-router';
+// import GroupsView from '../views/GroupsView.vue';
+import GroupsView from '../views/dev/GroupView.vue';
+
 const router = createRouter({
     history: createWebHistory(),
     routes: [
@@ -189,12 +192,75 @@ const router = createRouter({
                     name: 'Userakademi',
                     component: () => import('@/views/dev/User_akademi.vue')
                 },
+                {
+                    path: '/dev/Statustraining',
+                    name: 'Statustraining',
+                    component: () => import('@/views/dev/Status_training.vue')
+                },
+                {
+                    path: '/dev/seq',
+                    name: 'seq',
+                    component: () => import('@/views/dev/seq.vue')
+                },
+
+                {
+                    path: '/dev/Training',
+                    name: 'Training',
+                    component: () => import('@/views/dev/Training.vue')
+                },
+                {
+                    path: '/dev/tipetraining',
+                    name: 'tipetraining',
+                    component: () => import('@/views/dev/Tipe_training.vue')
+                },
+                {
+                    path: '/dev/Subkompetensi',
+                    name: 'Subkompetensi',
+                    component: () => import('@/views/dev/Sub_kompetensi.vue')
+                },
+                {
+                    path: '/dev/Kompetensilevel',
+                    name: 'Kompetensilevel',
+                    component: () => import('@/views/dev/Kompetensi_level.vue')
+                },
+                {
+                    path: '/dev/Checklist',
+                    name: 'Checklist',
+                    component: () => import('@/views/dev/Checklist.vue')
+                },
+                {
+                    path: '/dev/Trainingchecklist',
+                    name: 'Trainingchecklist',
+                    component: () => import('@/views/dev/Training_checklist.vue')
+                },
+                {
+                    // Rute untuk halaman manajemen grup
+                    path: '/groups',
+                    name: 'groups',
+                    component: GroupsView // Menghubungkan URL '/groups' dengan komponen GroupsView
+                },
+                {
+                    path: '/dev/frontnew',
+                    name: 'frontnew',
+                    component: () => import('@/views/dev/v2/FrontNew.vue')
+                },
+                {
+                    path: '/dev/brand',
+                    name: 'brand',
+                    component: () => import('@/views/dev/BrandView.vue')
+                },
                 // Development
                 // {
                 //     path: '/dev/user',
                 //     name: 'user',
                 //     component: () => import('@/views/dev/user.vue')
                 // },
+
+                {
+                    path: '/dev/Kosong',
+                    name: 'Kosong',
+                    component: () => import('@/views/pages/Kosong.vue')
+                },
 
             ]
 

@@ -213,8 +213,6 @@ function editItem(dataRow) {
 const handleSubmit = async () => {
     //untuk edit id sudah ada
     if (item.value.id) {
-
-        //cek user apakah ada atau tidak
         try {
             const results = await custumFetch.put("/Userakademis/" + item.value.id,
                 {
@@ -235,33 +233,90 @@ const handleSubmit = async () => {
         }
 
     } else {
-        try {
-            const results = await custumFetch.post("/Userakademis",
-                {
-                    username: item.value.username,
-                    kode_akademi: item.value.kode_akademi,
-                }, {
+        //cek user apakah ada atau tidak
+        await searchByUsername()
+        await searchUserakademi()
+        if ((usernames.value).length > 0 && (userakademi.value).length < 1) {
+            try {
+                const results = await custumFetch.post("/Userakademis",
+                    {
+                        username: item.value.username,
+                        kode_akademi: item.value.kode_akademi,
+                    }, {
+                    withCredentials: true,
+                    headers: {
+                        "X-API-TOKEN": await getToken()
+                    },
+                }
+                )
+                formDialog.value = false
+                item.value = {}
+                toast.add({ severity: 'success', summary: 'Successful', detail: 'Create User_akademi Success', life: 3000 });
+            } catch (error) {
+                console.log(error)
+            }
+        } else {
+            toast.add({ severity: 'error', summary: 'Gagal', detail: 'Set user akademi gagal...', life: 3000 });
+        }
+    }
+    searchData()
+}
+
+const usernames = ref(null)
+const searchByUsername = async () => {
+    let urlParam = ""
+    urlParam = '&username=' + item.value.username
+    try {
+        const { data } = await custumFetch.get("/users/?page=" + pageNo.value + '&size=' + rowPerPage.value + urlParam,
+            {
                 withCredentials: true,
                 headers: {
                     "X-API-TOKEN": await getToken()
                 },
             }
-            )
-            formDialog.value = false
-            item.value = {}
-            toast.add({ severity: 'success', summary: 'Successful', detail: 'Create User_akademi Success', life: 3000 });
-        } catch (error) {
-            console.log(error)
-        }
+        )
+        usernames.value = data.data
+        // console.log(usernames.value)
+        jmlRows.value = data.paging.total_rows
+    } catch (error) {
+        console.log(error)
     }
-    searchData()
 }
+
+//=====
+const userakademi = ref(null)
+const searchUserakademi = async () => {
+    let urlParam = ""
+    urlParam = '&username=' + item.value.username
+    try {
+        const { data } = await custumFetch.get("/userakademis/?page=" + pageNo.value + '&size=' + rowPerPage.value + urlParam,
+            {
+                withCredentials: true,
+                headers: {
+                    "X-API-TOKEN": await getToken()
+                },
+            }
+        )
+        userakademi.value = data.data
+        // console.log(userakademi.value)
+        jmlRows.value = data.paging.total_rows
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
+
+
+
+
 
 onMounted(async () => {
     pageNo.value = 1
     await searchData()
     // getUser()
     await getAkademi()
+
 });
 const getAkademi = async () => {
     const paramCari = ((JSON.parse(JSON.stringify(filters.value))).global.value)

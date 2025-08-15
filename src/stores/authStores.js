@@ -46,6 +46,9 @@ export const useAuthStore = defineStore('user', () => {
             console.log(error)
         }
     }
+
+
+
     return { loginUser, currentUser, logoutUser, getToken }
 }
 )

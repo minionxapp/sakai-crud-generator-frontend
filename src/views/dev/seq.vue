@@ -20,7 +20,7 @@
                 currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products">
                 <template #header>
                     <div class="flex flex-wrap gap-2 items-center justify-between">
-                        <h4 class="m-0">Manage Sub Job Family</h4>
+                        <h4 class="m-0">Manage seq</h4>
                         <IconField>
                             <InputIcon @click="searchData()">
                                 <i class=" pi pi-search" />
@@ -33,8 +33,8 @@
                 <Column selectionMode="multiple" style="width: 3rem" :exportable="false"></Column>
                 <Column field="id" header="Id" sortable style="min-width: 4rem"></Column>
                 <Column field="kode" header="Kode" sortable style="min-width: 4rem"></Column>
-                <Column field="kode_job_family" header="Kode_job_family" sortable style="min-width: 4rem"></Column>
-                <Column field="nama" header="Nama" sortable style="min-width: 4rem"></Column>
+                <Column field="tahun" header="Tahun" sortable style="min-width: 4rem"></Column>
+                <Column field="last_squence" header="Last_squence" sortable style="min-width: 4rem"></Column>
                 <Column field="desc" header="Desc" sortable style="min-width: 4rem"></Column>
                 <Column :exportable="false" style="min-width: 4rem">
                     <template #body="slotProps">
@@ -56,8 +56,7 @@
                 </template>
             </Dialog>
             <!-- //CREATE DIALOG -->
-            <Dialog v-model:visible="formDialog" :style="{ width: '550px' }" header="Sub_job_family Details"
-                :modal="true">
+            <Dialog v-model:visible="formDialog" :style="{ width: '550px' }" header="seq Details" :modal="true">
                 <div class="flex flex-col gap-6">
                     <img v-if="product.image"
                         :src="`https://primefaces.org/cdn/primevue/images/product/${product.image}`"
@@ -74,18 +73,19 @@
                             <small v-if="submitted && !item.kode" class="text-red-500">kode is required.</small>
                         </div>
                         <div>
-                            <label for="kode_job_family" class="block font-bold mb-3">Job Family</label>
-                            <Select id="kode_job_family" v-model="item.kode_job_family" :options="jobFamily"
-                                optionLabel="nama" optionValue="kode" placeholder="Job Family" class="w-full"></Select>
-                            <!-- <InputText rows="5" id="kode_job_family" v-model.trim="item.kode_job_family"
-                                required="false" fluid /> -->
-                            <small v-if="submitted && !item.kode_job_family" class="text-red-500">kode_job_family is
-                                required.</small>
+                            <label for="tahun" class="block font-bold mb-3">Tahun</label>
+                            <InputNumber :showIcon="true" :showButtonBar="true" rows="5" id="tahun"
+                                v-model.trim="item.tahun" required="false" fluid showButtons mode="decimal">
+                            </InputNumber>
+                            <small v-if="submitted && !item.tahun" class="text-red-500">tahun is required.</small>
                         </div>
                         <div>
-                            <label for="nama" class="block font-bold mb-3">Nama</label>
-                            <InputText rows="5" id="nama" v-model.trim="item.nama" required="false" fluid />
-                            <small v-if="submitted && !item.nama" class="text-red-500">nama is required.</small>
+                            <label for="last_squence" class="block font-bold mb-3">Last_squence</label>
+                            <InputNumber :showIcon="true" :showButtonBar="true" rows="5" id="last_squence"
+                                v-model.trim="item.last_squence" required="false" fluid showButtons mode="decimal">
+                            </InputNumber>
+                            <small v-if="submitted && !item.last_squence" class="text-red-500">last_squence is
+                                required.</small>
                         </div>
                         <div>
                             <label for="desc" class="block font-bold mb-3">Desc</label>
@@ -135,11 +135,6 @@ const itemDelete = ref()
 const pageNo = ref()
 const jmlRows = ref(0)
 const rowPerPage = ref(10)
-const jobFamily = ref([])
-
-
-
-
 async function onPageChange(event) {
     pageNo.value = event.page + 1
     rowPerPage.value = event.rows
@@ -159,11 +154,11 @@ const searchData = async () => {
     const paramCari = ((JSON.parse(JSON.stringify(filters.value))).global.value)
     let urlParam = ""
     if (paramCari) {
-        urlParam = '&nama=' + paramCari
+        urlParam = '&name=' + paramCari
         //sesuaikan ya dengan nama kolom pencariannya
     }
     try {
-        const { data } = await custumFetch.get("/Subjobfamilys/?page=" + pageNo.value + '&size=' + rowPerPage.value + urlParam,
+        const { data } = await custumFetch.get("/seqs/?page=" + pageNo.value + '&size=' + rowPerPage.value + urlParam,
             {
                 withCredentials: true,
                 headers: {
@@ -183,7 +178,7 @@ function confirmDeleteItem(value) {
 }
 async function deleteItem() {
     deleteDialog.value = false
-    const myasetDelete = await custumFetch.delete('/Subjobfamilys/' + itemDelete.value.id,
+    const myasetDelete = await custumFetch.delete('/seqs/' + itemDelete.value.id,
         {
             withCredentials: true,
             headers: {
@@ -193,7 +188,7 @@ async function deleteItem() {
     )
     deleteDialog.value = false;
     itemDelete.value = {};
-    toast.add({ severity: 'success', summary: 'Successful', detail: 'Sub_job_family Deleted', life: 3000 });
+    toast.add({ severity: 'success', summary: 'Successful', detail: 'seq Deleted', life: 3000 });
     searchData()
 }
 
@@ -210,11 +205,11 @@ const handleSubmit = async () => {
     //untuk edit id sudah ada
     if (item.value.id) {
         try {
-            const results = await custumFetch.put("/Subjobfamilys/" + item.value.id,
+            const results = await custumFetch.put("/seqs/" + item.value.id,
                 {
                     kode: item.value.kode,
-                    kode_job_family: item.value.kode_job_family,
-                    nama: item.value.nama,
+                    tahun: item.value.tahun,
+                    last_squence: item.value.last_squence,
                     desc: item.value.desc,
                 }, {
                 withCredentials: true,
@@ -225,18 +220,18 @@ const handleSubmit = async () => {
             )
             formDialog.value = false
             item.value = {}
-            toast.add({ severity: 'success', summary: 'Successful', detail: 'Update Sub_job_family Success', life: 3000 });
+            toast.add({ severity: 'success', summary: 'Successful', detail: 'Update seq Success', life: 3000 });
         } catch (error) {
             console.log(error)
         }
 
     } else {
         try {
-            const results = await custumFetch.post("/Subjobfamilys",
+            const results = await custumFetch.post("/seqs",
                 {
                     kode: item.value.kode,
-                    kode_job_family: item.value.kode_job_family,
-                    nama: item.value.nama,
+                    tahun: item.value.tahun,
+                    last_squence: item.value.last_squence,
                     desc: item.value.desc,
                 }, {
                 withCredentials: true,
@@ -247,7 +242,7 @@ const handleSubmit = async () => {
             )
             formDialog.value = false
             item.value = {}
-            toast.add({ severity: 'success', summary: 'Successful', detail: 'Create Sub_job_family Success', life: 3000 });
+            toast.add({ severity: 'success', summary: 'Successful', detail: 'Create seq Success', life: 3000 });
         } catch (error) {
             console.log(error)
         }
@@ -257,26 +252,5 @@ const handleSubmit = async () => {
 onMounted(async () => {
     pageNo.value = 1
     searchData()
-    getJobFamily()
 });
-
-
-
-
-
-const getJobFamily = async () => {
-    try {
-        const { data } = await custumFetch.get("/jobfamilys" + '?size=99',
-            {
-                withCredentials: true,
-                headers: {
-                    "X-API-TOKEN": await getToken()
-                },
-            }
-        )
-        jobFamily.value = data.data
-    } catch (error) {
-        console.log(error)
-    }
-}
 </script>

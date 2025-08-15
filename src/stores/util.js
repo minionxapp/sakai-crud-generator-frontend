@@ -16,6 +16,10 @@ export const dateFormat = async (tgl) => {
     let day = ('' + (tgl.getDate() + 100)).slice(-2)
     let year = (tgl).getFullYear()
     let dateFormat = year + '-' + month + '-' + day
-    // alert(dateFormat)
     return dateFormat
+}
+
+
+const getAkaByToken = async (token) => {
+    return
 }

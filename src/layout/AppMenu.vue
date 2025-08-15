@@ -14,13 +14,49 @@ const model = ref([
     {
         label: 'Admin',
         items: [
-            { label: 'User', icon: 'pi pi-fw pi-car', to: { name: 'user' } },
-            { label: 'Group', icon: 'pi pi-fw pi-users', to: { name: 'group' } },
-            { label: 'Job Family', icon: 'pi pi-fw pi-briefcase', to: { name: 'Jobfamily' } },
-            { label: 'Sub Job Family', icon: 'pi pi-fw pi-paperclip', to: { name: 'Subjobfamily' } },
-            { label: 'Kompetensi', icon: 'pi pi-fw pi-slack', to: { name: 'Kompetensi' } },
-            { label: 'akademi', icon: 'pi pi-fw pi-globe', to: { name: 'akademi' } },
-            { label: 'User Akademi', icon: 'pi pi-fw pi-android', to: { name: 'Userakademi' } }
+            {
+                label: 'Parameter', items: [
+                    { label: 'Status Training', icon: 'pi pi-fw pi-sort-alpha-down', to: { name: 'Statustraining' } },
+                    { label: 'Seq', icon: 'pi pi-fw pi-sort-numeric-down', to: { name: 'seq' } },
+                    { label: 'Tipe Training', icon: 'pi pi-fw pi-car', to: { name: 'tipetraining' } },
+                    { label: 'Checklist', icon: 'pi pi-fw pi-car', to: { name: 'Checklist' } }
+
+
+                ]
+            },
+            {
+                label: 'User & Group', items: [
+                    { label: 'User', icon: 'pi pi-fw pi-user-plus', to: { name: 'user' } },
+                    { label: 'Group', icon: 'pi pi-fw pi-users', to: { name: 'group' } },
+                    { label: 'Akademi', icon: 'pi pi-fw pi-building-columns', to: { name: 'akademi' } },
+                    { label: 'User Akademi', icon: 'pi pi-fw pi-graduation-cap', to: { name: 'Userakademi' } },
+                    { label: 'User Direktory', icon: 'pi pi-fw pi-folder-open', to: { name: 'dev_direktori' } },
+                ]
+            }, {
+                label: 'Job & Kompetensi', items: [
+                    { label: 'Job Family', icon: 'pi pi-fw pi-briefcase', to: { name: 'Jobfamily' } },
+                    { label: 'Sub Job Family', icon: 'pi pi-fw pi-paperclip', to: { name: 'Subjobfamily' } },
+                    { label: 'Kompetensi', icon: 'pi pi-fw pi-key', to: { name: 'Kompetensi' } },
+                    { label: 'Kompetensi Level', icon: 'pi pi-fw pi-clock', to: { name: 'Kompetensilevel' } }
+                    // { label: 'Sub Kompetensi', icon: 'pi pi-fw pi-file-check', to: { name: 'Subkompetensi' } }
+
+                ]
+            },
+
+            // { label: 'Akademi', icon: 'pi pi-fw pi-building-columns', to: { name: 'akademi' } },
+            // { label: 'User Akademi', icon: 'pi pi-fw pi-graduation-cap', to: { name: 'Userakademi' } }
+        ]
+    },
+    {
+        label: 'Event',
+        items: [
+            {
+                label: 'Learning', items: [
+                    { label: 'Training', icon: 'pi pi-fw pi-book', to: { name: 'Training' } },
+                    { label: 'Trainingchecklist', icon: 'pi pi-fw pi-car', to: { name: 'Trainingchecklist' } }
+                ]
+            },
+
         ]
     },
     {
@@ -30,6 +66,7 @@ const model = ref([
         { label: 'Table Kolom', icon: 'pi pi-fw pi-objects-column', to: '/dev/tablekolom' },
         { label: 'Backend', icon: 'pi pi-fw pi-barcode ', to: '/dev' },
         { label: 'Frontend', icon: 'pi pi-fw pi-code', to: { name: 'front' } },
+        { label: 'Frontendv2', icon: 'pi pi-fw pi-code', to: { name: 'frontnew' } },
 
             // { label: 'Coba', icon: 'pi pi-fw pi-car', to: { name: 'coba' } },
             // { label: 'dev_direktori', icon: 'pi pi-fw pi-car', to: { name: 'dev_direktori' } },
@@ -42,11 +79,15 @@ const model = ref([
         items: [
             {
                 label: 'Coba', icon: 'pi pi-fw pi-clipboard', items: [
-                    { label: 'dev_direktori', icon: 'pi pi-fw pi-folder-open', to: { name: 'dev_direktori' } },
-                    { label: 'group', icon: 'pi pi-fw pi-users', to: { name: 'group' } },
+                    // { label: 'dev_direktori', icon: 'pi pi-fw pi-folder-open', to: { name: 'dev_direktori' } },
+                    // { label: 'group', icon: 'pi pi-fw pi-users', to: { name: 'group' } },
+                    { label: 'Brand', icon: 'pi pi-fw pi-car', to: { name: 'brand' } },
+
                     { label: 'testaja', icon: 'pi pi-fw pi-car', to: { name: 'testaja' } },
                     // { label: 'user', icon: 'pi pi-fw pi-user', to: { name: 'user' } }
-                    { label: 'pmakai', icon: 'pi pi-fw pi-car', to: { name: 'pmakai' } }
+                    { label: 'pmakai', icon: 'pi pi-fw pi-car', to: { name: 'pmakai' } },
+                    { label: 'Kosong', icon: 'pi pi-fw pi-car', to: { name: 'Kosong' } }
+
                 ]
             },
         ]
